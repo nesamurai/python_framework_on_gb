@@ -1,9 +1,39 @@
-class Student():
+from abc import ABC, abstractmethod
+
+
+class AbstractStudent(ABC):
+    @abstractmethod
+    def enter_course(self):
+        pass
+
+
+class Student(AbstractStudent):
     def __init__(self, name, purse, grade):
         self.name = name
         self.purse = purse
         self.grade = grade
         self.courses = []
+        self.age = None
+
+    def enter_course(self, course):
+        self.courses.append(course)
+
+
+class AbstractStudentDecorator(AbstractStudent, ABC):
+    def __init__(self, student):
+        self.student = student
+
+    @abstractmethod
+    def enter_course(self):
+        pass
+
+
+class CheckAgeDecorator(AbstractStudentDecorator):
+    def enter_course(self, course):
+        if self.student.age < 18:
+            raise ValueError("To enter a course student have to be older than 18")
+        print("Student is applicable to the course")
+        self.student.enter_course(course)
 
 
 class Course():
@@ -16,7 +46,6 @@ class Course():
         self.free = True
         self.cost = None
         self.level = None
-
 
 
 class CourseBuilder:
@@ -43,4 +72,6 @@ course_builder.get_level()
 first_student = Student('Petr Popov', 20000, 'junior')
 course_builder.add_student(first_student)
 python_course = course_builder.create()
-first_student.courses.append(python_course)
+
+second_student = Student('Grigory Zaharov', 15000, 'junior', age=22)
+check_age_decorator = CheckAgeDecorator(second_student)
