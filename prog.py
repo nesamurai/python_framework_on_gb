@@ -8,7 +8,8 @@ class AbstractStudent(ABC):
 
 
 class Student(AbstractStudent):
-    def __init__(self, name, purse, grade):
+    def __init__(self, id, name, purse, grade):
+        self.id = id
         self.name = name
         self.purse = purse
         self.grade = grade
